@@ -1,0 +1,8 @@
+{
+    "Codegeex.RepoIndex": true,
+    "Codegeex.CommitMessage.LanguagePreference": "English",
+    "Codegeex.Chat.LanguagePreference": "English",
+    "Codegeex.Comment.LanguagePreference": "English",
+    "Codegeex.CommitMessageStyle": "Default",
+    "livePreview.defaultPreviewPath": "/help-my-main/admin.html"
+}

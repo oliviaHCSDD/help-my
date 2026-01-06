@@ -2,7 +2,14 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import {
+  getFirestore,
+  collection, doc,
+  getDoc, setDoc,
+  addDoc, updateDoc, deleteDoc,
+  onSnapshot, query, orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 // ✅ Firebase Config (من Firebase Console → Project settings → Web app)
 const firebaseConfig = {
@@ -18,3 +25,37 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// دالة للحصول على الإعدادات
+export async function getSettings() {
+  try {
+    const docRef = doc(db, "app", "settings");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+    return { openInNewTab: false, appTitle: "قائمة البروفايلات", appSubtitle: "" };
+  } catch (error) {
+    console.error("خطأ في الحصول على الإعدادات:", error);
+    return { openInNewTab: false, appTitle: "قائمة البروفايلات", appSubtitle: "" };
+  }
+}
+
+// دالة للاستماع للبروفايلات بشكل مباشر
+export function liveProfiles(callback) {
+  try {
+    const q = query(collection(db, "profiles"), orderBy("order", "asc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      callback(items);
+    }, (error) => {
+      console.error("خطأ في الاستماع للبروفايلات:", error);
+      callback([]);
+    });
+    return unsubscribe;
+  } catch (error) {
+    console.error("خطأ في الاستماع للبروفايلات:", error);
+    callback([]);
+    return () => {};
+  }
+}

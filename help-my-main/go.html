@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جاري الانتقال...</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #0b1220;
+      color: #e9eefc;
+    }
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(233, 238, 252, 0.1);
+      border-top-color: #79a7ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    h1 { margin: 0 0 10px; }
+    p { color: #a8b3d6; }
+    .link {
+      display: inline-block;
+      margin-top: 20px;
+      color: #79a7ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner"></div>
+    <h1>جاري الانتقال...</h1>
+    <p>يرجى الانتظار قليلاً</p>
+    <a id="manualLink" href="#" class="link">انقر هنا إذا لم يتم الانتقال تلقائياً</a>
+  </div>
+  <script>
+    // الحصول على الرابط من معلمة URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetUrl = urlParams.get('url');
+
+    if (targetUrl) {
+      document.getElementById('manualLink').href = targetUrl;
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 1000);
+    } else {
+      document.querySelector('h1').textContent = 'خطأ';
+      document.querySelector('p').textContent = 'لم يتم تحديد رابط للانتقال';
+      document.getElementById('manualLink').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

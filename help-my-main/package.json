@@ -1,0 +1,12 @@
+{
+  "name": "profile-manager",
+  "version": "1.0.0",
+  "description": "تطبيق لإدارة وعرض البروفايلات",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080"
+  },
+  "keywords": ["profile", "manager"],
+  "author": "",
+  "license": "MIT"
+}
