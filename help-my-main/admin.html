@@ -381,17 +381,69 @@
 
       try{
         console.log("محاولة تسجيل الدخول بـ:", em);
-        await signInWithEmailAndPassword(auth, em, pw);
-        console.log("تم تسجيل الدخول بنجاح!");
+
+        // تعطيل الزر أثناء المعالجة
+        loginBtn.disabled = true;
+        loginBtn.textContent = "جاري التحقق...";
+
+        const userCredential = await signInWithEmailAndPassword(auth, em, pw);
+        console.log("تم تسجيل الدخول بنجاح!", userCredential);
+
+        // التحقق من حالة المستخدم
+        if (userCredential.user) {
+          console.log("بيانات المستخدم:", {
+            email: userCredential.user.email,
+            emailVerified: userCredential.user.emailVerified,
+            uid: userCredential.user.uid
+          });
+        }
+
         // onAuthStateChanged سيتولى إظهار لوحة الأدمن
       }catch(e){
         console.error("خطأ في تسجيل الدخول:", e);
         const { code, msg } = normalizeErr(e);
-        setMsg(loginMsg, "فشل تسجيل الدخول. راجعي البيانات أو الإعدادات.", "error");
+
+        // رسائل خطأ أكثر تفصيلاً
+        let errorMsg = "فشل تسجيل الدخول. ";
+        switch(code) {
+          case "auth/user-not-found":
+            errorMsg = "المستخدم غير موجود. تأكدي من البريد الإلكتروني.";
+            break;
+          case "auth/wrong-password":
+            errorMsg = "كلمة المرور غير صحيحة.";
+            break;
+          case "auth/invalid-email":
+            errorMsg = "البريد الإلكتروني غير صالح.";
+            break;
+          case "auth/user-disabled":
+            errorMsg = "هذا الحساب معطل.";
+            break;
+          case "auth/too-many-requests":
+            errorMsg = "محاولات كثيرة. انتظري قليلاً ثم حاولي مرة أخرى.";
+            break;
+          case "auth/unauthorized-domain":
+            errorMsg = "الدومين غير مصرح به. يجب إضافة oliviahcsdd.github.io في Firebase Console.";
+            break;
+          case "auth/invalid-credential":
+            errorMsg = "البريد أو كلمة المرور غير صحيحة.";
+            break;
+          default:
+            errorMsg += `(${code})`;
+        }
+
+        setMsg(loginMsg, errorMsg, "error");
         debugText.textContent =
-          `code: ${code}\nmessage: ${msg}\n` +
-          `tip: إذا كان code = auth/unauthorized-domain أضيفي oliviahcsdd.github.io في Authorized domains.`;
+          `code: ${code}\nmessage: ${msg}\n\n` +
+          `نصائح:\n` +
+          `1. تأكدي من إضافة oliviahcsdd.github.io في Authorized domains\n` +
+          `2. تأكدي من تفعيل Email/Password في Sign-in method\n` +
+          `3. تأكدي من وجود المستخدم في Users\n` +
+          `4. تأكدي من إيقاف Email verification إذا كان مفعلاً`;
         debugBox.style.display = "block";
+      } finally {
+        // إعادة تفعيل الزر
+        loginBtn.disabled = false;
+        loginBtn.textContent = "تسجيل الدخول";
       }
     });
 
