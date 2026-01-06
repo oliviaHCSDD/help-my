@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تطبيق الروابط</title>
+  <meta name="theme-color" content="#0b1220" />
+  <style>
+    :root{--bg:#0b1220;--text:#e9eefc;--muted:#a8b3d6;--line:rgba(233,238,252,.12);--shadow:0 18px 50px rgba(0,0,0,.35)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);
+      background:radial-gradient(1200px 600px at 80% 0%, rgba(121,167,255,.26), transparent 60%),
+               radial-gradient(900px 500px at 10% 20%, rgba(156,245,255,.14), transparent 55%),var(--bg);min-height:100vh}
+    .app{max-width:1050px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px;min-height:100vh}
+    .topbar{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+      box-shadow:var(--shadow);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0;flex:1 1 auto}
+    .mark{width:42px;height:42px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);position:relative;overflow:hidden}
+    .mark:after{content:"";position:absolute;inset:-30%;background:conic-gradient(from 180deg, rgba(121,167,255,0), rgba(121,167,255,.25), rgba(156,245,255,.18), rgba(121,167,255,0));
+      filter:blur(12px);transform:rotate(12deg)}
+    .title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pill{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;padding:8px 10px;border-radius:999px;white-space:nowrap}
+    .search{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:14px;padding:10px 12px;min-width:min(420px,92vw);flex:0 1 520px}
+    .search input{width:100%;background:transparent;border:0;outline:none;color:var(--text);font-size:14px}
+    .panel{border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));box-shadow:var(--shadow);overflow:hidden}
+    .panelHeader{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:rgba(255,255,255,.02)}
+    .panelTitle{font-weight:800} .panelHint{color:var(--muted);font-size:12px}
+    .list{padding:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    @media (max-width:860px){.list{grid-template-columns:1fr}}
+    .btn{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:18px;padding:12px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:right;
+      transition:transform .08s ease, background .15s ease}
+    .btn:hover{background:rgba(255,255,255,.06)} .btn:active{transform:scale(.99)}
+    .left{display:flex;align-items:center;gap:12px;min-width:0}
+    .avatar{width:50px;height:50px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;overflow:hidden;flex:0 0 auto}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .fallback{font-weight:800;font-size:14px;color:rgba(233,238,252,.92)}
+    .text{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px}
+    .meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px}
+    .status{width:8px;height:8px;border-radius:999px;border:1px solid rgba(233,238,252,.14);background:rgba(168,179,214,.55)}
+    .status.online{background:rgba(80,220,140,.85);border-color:rgba(80,220,140,.35)}
+    .right{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+    .open{border:1px solid var(--line);background:rgba(255,255,255,.02);color:var(--muted);font-size:12px;padding:6px 10px;border-radius:999px}
+    .empty{padding:18px;color:var(--muted);font-size:14px}
+    .footer{margin-top:auto;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03);padding:12px 14px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .footer a{color:var(--muted);text-decoration:none;border-bottom:1px dashed rgba(168,179,214,.35);padding-bottom:2px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div class="title" id="appTitle">تحميل…</div>
+          <div class="sub" id="appSubtitle">—</div>
+        </div>
+      </div>
+      <div class="pill" id="countPill">—</div>
+      <div class="search">
+        <input id="q" type="text" placeholder="بحث باسم البروفايل…" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panelHeader">
+        <div>
+          <div class="panelTitle">البروفايلات</div>
+          <div class="panelHint">اضغطي على بروفايل لفتح صفحة بلوجر.</div>
+        </div>
+        <div class="pill" id="visiblePill">—</div>
+      </div>
+      <div class="list" id="list"></div>
+      <div class="empty" id="empty" style="display:none;">لا توجد بروفايلات بعد. افتحي admin.html لإضافة بروفايلات.</div>
+    </div>
+
+    <div class="footer">
+      <div>
+        <a href="privacy.html">سياسة الخصوصية</a> <span> | </span>
+        <a href="terms.html">الشروط</a> <span> | </span>
+        <a href="admin.html">لوحة الأدمن</a>
+      </div>
+      <div id="openMode">—</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { liveProfiles, getSettings } from "./app.js";
+
+    const elTitle = document.getElementById("appTitle");
+    const elSub = document.getElementById("appSubtitle");
+    const countPill = document.getElementById("countPill");
+    const visiblePill = document.getElementById("visiblePill");
+    const list = document.getElementById("list");
+    const empty = document.getElementById("empty");
+    const q = document.getElementById("q");
+    const openMode = document.getElementById("openMode");
+
+    let all = [];
+    let settings = { openInNewTab:false };
+
+    function esc(s){ return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+    function initials(name){
+      const parts = (name||"").trim().split(/\s+/).filter(Boolean);
+      const a = parts[0]?.[0] || "؟";
+      const b = parts[1]?.[0] || parts[0]?.[1] || "";
+      return (a+b).trim() || "؟";
+    }
+
+    function render(items){
+      list.innerHTML = "";
+      if(!items.length){
+        empty.style.display = "block";
+        visiblePill.textContent = "المعروض: 0";
+        return;
+      }
+      empty.style.display = "none";
+      visiblePill.textContent = `المعروض: ${items.length}`;
+
+      items.forEach(p => {
+        if(p.active === false) return; // إخفاء المعطل
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn";
+
+        const avatar = (p.avatar||"").trim()
+          ? `<img alt="صورة ${esc(p.name)}" src="${esc(p.avatar)}" loading="lazy" />`
+          : `<div class="fallback" aria-hidden="true">${esc(initials(p.name))}</div>`;
+
+        const statusClass = (p.status === "online") ? "online" : "";
+
+        btn.innerHTML = `
+          <div class="left">
+            <div class="avatar">${avatar}</div>
+            <div class="text">
+              <div class="name"><span>${esc(p.name || "بدون اسم")}</span></div>
+              <div class="meta"><span class="status ${statusClass}"></span><span>${esc(p.subtitle || "—")}</span></div>
+            </div>
+          </div>
+          <div class="right"><div class="open">فتح</div></div>
+        `;
+
+        btn.addEventListener("click", () => {
+          const url = (p.url || "").trim();
+          if(!url) return;
+          if(settings.openInNewTab){
+            window.open(url, "_blank", "noopener,noreferrer");
+          } else {
+            window.location.href = url;
+          }
+        });
+
+        list.appendChild(btn);
+      });
+    }
+
+    settings = await getSettings();
+    elTitle.textContent = settings.appTitle || "قائمة البروفايلات";
+    elSub.textContent = settings.appSubtitle || "";
+    openMode.textContent = settings.openInNewTab ? "فتح في تبويب جديد" : "فتح في نفس التبويب";
+
+    liveProfiles((items) => {
+      all = items;
+      countPill.textContent = `الإجمالي: ${all.length}`;
+      const term = (q.value||"").trim().toLowerCase();
+      const filtered = term
+        ? all.filter(p => ((p.name||"")+" "+(p.subtitle||"")).toLowerCase().includes(term))
+        : all;
+      render(filtered);
+    });
+
+    q.addEventListener("input", () => {
+      const term = (q.value||"").trim().toLowerCase();
+      render(term ? all.filter(p => ((p.name||"")+" "+(p.subtitle||"")).toLowerCase().includes(term)) : all);
+    });
+  </script>
+</body>
+</html>
