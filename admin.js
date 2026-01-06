@@ -13,7 +13,7 @@ loginForm.addEventListener("submit", async (e) => {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "./dashboard.html";
+    window.location.href = "./admin.html";
   } catch (err) {
     errorBox.textContent = err.message;
   }
