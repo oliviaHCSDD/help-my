@@ -11,7 +11,7 @@ import {
 
 // Firebase Config (من مشروعك)
 const firebaseConfig = {
-  apiKey: "AIzaSyD5c4maRwuXA8ZnwTa6JHQ6PcT5tE5ODY",
+  apiKey: "AIzaSyC3dd6-gMyPN0Unz1ssvF6tMKIW0SxCkvA",
   authDomain: "my-html-app-e06ff.firebaseapp.com",
   projectId: "my-html-app-e06ff",
   storageBucket: "my-html-app-e06ff.firebasestorage.app",
@@ -96,3 +96,4 @@ export async function updateProfile(id, p) {
 export async function deleteProfile(id) {
   return deleteDoc(doc(db, "profiles", id));
 }
+
