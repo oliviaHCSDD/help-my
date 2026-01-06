@@ -3,145 +3,515 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>تطبيق الروابط</title>
+  <title>قائمة البروفايلات</title>
   <meta name="theme-color" content="#0b1220" />
+
   <style>
     :root{
-      --bg:#0b1220; --panel:#0f1b33; --text:#e9eefc; --muted:#a8b3d6;
-      --line:rgba(233,238,252,.12); --accent:#79a7ff;
-      --btn:rgba(255,255,255,.04); --btnHover:rgba(255,255,255,.07);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 600px at 80% 0%, rgba(121,167,255,.25), transparent 60%),
-        radial-gradient(900px 500px at 10% 20%, rgba(121,167,255,.18), transparent 55%),
-        var(--bg);
-      min-height:100vh;
-    }
-    .wrap{max-width:980px; margin:0 auto; padding:16px;}
-    .card{
-      border:1px solid var(--line);
-      border-radius:18px;
-      overflow:hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
-    }
-    header{
-      padding:16px;
-      border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .brand{display:flex; align-items:center; gap:12px;}
-    .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(121,167,255,.18)}
-    .title{font-weight:800; letter-spacing:.2px;}
-    .sub{font-size:12px; color:var(--muted); margin-top:2px;}
-    .hint{
-      font-size:12px; color:var(--muted);
-      padding:6px 10px; border:1px solid var(--line);
-      border-radius:999px; background: rgba(255,255,255,.03);
-      white-space:nowrap;
+      --bg:#0b1220;
+      --text:#e9eefc;
+      --muted:#a8b3d6;
+      --line:rgba(233,238,252,.12);
+      --accent:#79a7ff;
+      --accent2:#9cf5ff;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
     }
 
-    main{padding:16px;}
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:12px;
-    }
-    @media (max-width:720px){
-      .grid{grid-template-columns: 1fr;}
-    }
-    .btn{
-      width:100%;
-      border:1px solid var(--line);
-      background: var(--btn);
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       color:var(--text);
-      border-radius:16px;
-      padding:14px 14px;
-      cursor:pointer;
-      display:flex; align-items:center; justify-content:space-between;
-      transition: transform .08s ease, background .15s ease, border-color .15s ease;
-      text-align:right;
+      background:
+        radial-gradient(1200px 600px at 80% 0%, rgba(121,167,255,.26), transparent 60%),
+        radial-gradient(900px 500px at 10% 20%, rgba(156,245,255,.14), transparent 55%),
+        var(--bg);
     }
-    .btn:hover{background: var(--btnHover);}
-    .btn:active{transform: scale(.99);}
-    .badge{
-      font-size:11px;
-      color:var(--muted);
+
+    .app{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 16px;
+      min-height: 100%;
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+
+    .topbar{
       border:1px solid var(--line);
-      padding:2px 10px;
-      border-radius:999px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+      box-shadow: var(--shadow);
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .brandMark{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(121,167,255,.55), transparent 60%),
+        radial-gradient(18px 18px at 70% 70%, rgba(156,245,255,.35), transparent 60%),
+        rgba(255,255,255,.03);
+      position: relative;
+      overflow:hidden;
+      flex: 0 0 auto;
+    }
+    .brandMark::after{
+      content:"";
+      position:absolute;
+      inset:-30%;
+      background: conic-gradient(from 180deg, rgba(121,167,255,.0), rgba(121,167,255,.25), rgba(156,245,255,.18), rgba(121,167,255,.0));
+      filter: blur(12px);
+      transform: rotate(12deg);
+    }
+
+    .brandText{min-width:0}
+    .brandTitle{
+      font-weight: 800;
+      letter-spacing: .2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brandSub{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top:2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pill{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .search{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 10px 12px;
+      min-width: min(420px, 92vw);
+      flex: 0 1 520px;
+    }
+    .search svg{opacity:.75; flex:0 0 auto}
+    .search input{
+      width:100%;
+      background: transparent;
+      border: 0;
+      outline: none;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .search input::placeholder{color: rgba(168,179,214,.75)}
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .panelHeader{
+      padding: 14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
       background: rgba(255,255,255,.02);
     }
 
-    .footer{
-      padding:14px 16px;
-      border-top:1px solid var(--line);
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.6;
+    .panelTitle{font-weight: 800; letter-spacing:.2px;}
+    .panelHint{color: var(--muted); font-size: 12px;}
+
+    .list{
+      padding: 12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
     }
+    @media (max-width: 860px){
+      .list{grid-template-columns: 1fr;}
+    }
+
+    /* بطاقة البروفايل */
+    .profileBtn{
+      width:100%;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius: 18px;
+      padding: 12px;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      text-align: right;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      position: relative;
+      overflow:hidden;
+    }
+    .profileBtn:hover{background: rgba(255,255,255,.06);}
+    .profileBtn:active{transform: scale(.99);}
+    .profileBtn:focus{outline: 2px solid rgba(121,167,255,.35); outline-offset: 2px;}
+
+    .profileBtn::before{
+      content:"";
+      position:absolute;
+      inset:-60%;
+      background: radial-gradient(400px 180px at 30% 30%, rgba(121,167,255,.14), transparent 60%);
+      transform: rotate(10deg);
+      pointer-events:none;
+    }
+
+    .profileLeft{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width:0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .avatar{
+      width: 50px; height: 50px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(121,167,255,.45), transparent 60%),
+        radial-gradient(18px 18px at 70% 70%, rgba(156,245,255,.25), transparent 60%),
+        rgba(255,255,255,.03);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+      overflow:hidden;
+      position: relative;
+    }
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+    .avatarFallback{
+      font-weight: 800;
+      font-size: 14px;
+      color: rgba(233,238,252,.92);
+      letter-spacing: .4px;
+      user-select:none;
+    }
+
+    .profileText{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width:0;
+    }
+    .profileName{
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .verified{
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      border:1px solid rgba(121,167,255,.55);
+      background: rgba(121,167,255,.14);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .verified svg{opacity:.95}
+
+    .profileMeta{
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .dotStatus{
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: rgba(168,179,214,.7);
+      border:1px solid rgba(233,238,252,.18);
+      flex: 0 0 auto;
+    }
+    .dotStatus.online{ background: rgba(80, 220, 140, .85); border-color: rgba(80,220,140,.35); }
+    .dotStatus.offline{ background: rgba(168,179,214,.55); border-color: rgba(233,238,252,.14); }
+
+    .profileRight{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex: 0 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .openPill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .chev{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity: .95;
+    }
+    .chev svg{opacity:.9}
+
+    .appFooter{
+      margin-top:auto;
+      border:1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .appFooter a{
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(168,179,214,.35);
+      padding-bottom: 2px;
+    }
+    .appFooter a:hover{color: var(--text); border-bottom-color: rgba(233,238,252,.5);}
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="brand">
-          <span class="dot"></span>
-          <div>
-            <div class="title">تطبيق الروابط</div>
-            <div class="sub">واجهة واحدة + صفحات وسيطة لتقليل الحظر</div>
-          </div>
+  <div class="app">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true"></div>
+        <div class="brandText">
+          <div class="brandTitle">قائمة البروفايلات</div>
+          <div class="brandSub">اضغطي على بروفايل للانتقال إلى صفحة بلوجر</div>
         </div>
-        <div class="hint">10 أزرار</div>
-      </header>
-
-      <main>
-        <div class="grid" id="grid"></div>
-      </main>
-
-      <div class="footer">
-        ملاحظة: الأزرار لا تفتح الروابط الإعلانية مباشرة. كل زر يذهب إلى صفحة وسيطة (go.html)
-        ثم تضغطي “متابعة” لفتح الرابط في تبويب جديد. هذا يقلل احتمالات تقييد فيسبوك.
       </div>
+
+      <div class="pill" id="countPill">—</div>
+
+      <div class="search" role="search" aria-label="بحث">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input id="q" type="text" placeholder="بحث باسم البروفايل…" autocomplete="off" />
+      </div>
+    </div>
+
+    <!-- List panel -->
+    <div class="panel">
+      <div class="panelHeader">
+        <div>
+          <div class="panelTitle">البروفايلات</div>
+          <div class="panelHint">كل زر يفتح رابط صفحة بلوجر مخصص.</div>
+        </div>
+        <div class="pill" id="visiblePill">—</div>
+      </div>
+
+      <div class="list" id="list"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="appFooter">
+      <div>
+        <a href="privacy.html">سياسة الخصوصية</a>
+        <span> | </span>
+        <a href="terms.html">الشروط والأحكام</a>
+      </div>
+      <div>يفتح الروابط في نفس التبويب بشكل افتراضي (يمكن تغييره لتبويب جديد).</div>
     </div>
   </div>
 
   <script>
-    // أسماء عشوائية مؤقتًا — عدّليها لاحقًا
-    const BUTTONS = [
-      { id: 1, name: "بوابة ألفا" },
-      { id: 2, name: "مسار نوفا" },
-      { id: 3, name: "مركز زين" },
-      { id: 4, name: "ركن سيجما" },
-      { id: 5, name: "نافذة فجر" },
-      { id: 6, name: "ممر كواد" },
-      { id: 7, name: "محطة لونا" },
-      { id: 8, name: "نقطة أوريون" },
-      { id: 9, name: "بوابة بكسل" },
-      { id: 10, name: "ممر أطلس" }
+    /**
+     * عدّلي هنا:
+     * - name: اسم البروفايل (اسم الزر)
+     * - avatar: رابط صورة البروفايل (اختياري). إذا كان فارغًا تظهر الأحرف الأولى.
+     * - url: رابط صفحة بلوجر التي ستفتح عند الضغط
+     * - verified: شارة توثيق (true/false)
+     * - status: "online" أو "offline"
+     */
+    const PROFILES = [
+      { name: "هالة النجار",    subtitle: "مدونة شخصية",   avatar: "", url: "https://example.blogspot.com/", verified: true,  status: "online"  },
+      { name: "رامي الشامي",    subtitle: "مقالات تقنية",  avatar: "", url: "https://example.blogspot.com/p/page.html", verified: false, status: "offline" },
+      { name: "نور العبدالله", subtitle: "تدوينات يومية", avatar: "", url: "https://example.blogspot.com/", verified: true,  status: "offline" },
+      { name: "سليم منصور",    subtitle: "أخبار وملخصات", avatar: "", url: "https://example.blogspot.com/", verified: false, status: "online"  },
+      { name: "ليلى حسان",     subtitle: "محتوى متنوع",   avatar: "", url: "https://example.blogspot.com/", verified: false, status: "offline" },
+      { name: "عمر الخطيب",    subtitle: "شروحات",        avatar: "", url: "https://example.blogspot.com/", verified: false, status: "online"  },
+      { name: "ميس الريماوي",  subtitle: "خواطر",         avatar: "", url: "https://example.blogspot.com/", verified: true,  status: "offline" },
+      { name: "جود ياسين",     subtitle: "ملخصات",        avatar: "", url: "https://example.blogspot.com/", verified: false, status: "offline" },
+      { name: "آدم الرفاعي",   subtitle: "تقنيات",        avatar: "", url: "https://example.blogspot.com/", verified: true,  status: "online"  },
+      { name: "رنا كنعان",     subtitle: "أرشيف",         avatar: "", url: "https://example.blogspot.com/", verified: false, status: "offline" }
     ];
 
-    const grid = document.getElementById("grid");
+    // تغيير هذا إلى true إذا بدك فتح الروابط في تبويب جديد
+    const OPEN_IN_NEW_TAB = false;
 
-    function makeButton(item){
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "btn";
-      b.innerHTML = `<span>${item.name}</span><span class="badge">#${item.id}</span>`;
-      // يذهب للصفحة الوسيطة مع id
-      b.addEventListener("click", () => {
-        location.href = `go.html?id=${encodeURIComponent(item.id)}`;
-      });
-      return b;
+    const list = document.getElementById("list");
+    const q = document.getElementById("q");
+    const countPill = document.getElementById("countPill");
+    const visiblePill = document.getElementById("visiblePill");
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
-    BUTTONS.forEach(x => grid.appendChild(makeButton(x)));
+    function initials(name){
+      if(!name) return "؟";
+      const cleaned = name.trim().replace(/\s+/g, " ");
+      const parts = cleaned.split(" ").filter(Boolean);
+      const first = parts[0]?.[0] || "";
+      const second = parts[1]?.[0] || (parts[0]?.[1] || "");
+      const out = (first + second).trim();
+      return out ? out : cleaned.slice(0,2);
+    }
+
+    function verifiedBadge(){
+      return `
+        <span class="verified" title="موثق" aria-label="موثق">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      `;
+    }
+
+    function makeProfileButton(p, index){
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "profileBtn";
+      btn.dataset.name = ((p.name || "") + " " + (p.subtitle || "")).toLowerCase();
+
+      const avatarHtml = p.avatar
+        ? `<img alt="صورة ${escapeHtml(p.name)}" src="${escapeHtml(p.avatar)}" loading="lazy" />`
+        : `<div class="avatarFallback" aria-hidden="true">${escapeHtml(initials(p.name))}</div>`;
+
+      const isVerified = !!p.verified;
+      const statusClass = (p.status === "online") ? "online" : "offline";
+      const statusLabel = (p.status === "online") ? "متصل" : "غير متصل";
+
+      btn.innerHTML = `
+        <div class="profileLeft">
+          <div class="avatar">${avatarHtml}</div>
+          <div class="profileText">
+            <div class="profileName">
+              <span>${escapeHtml(p.name || ("بروفايل " + (index+1)))}</span>
+              ${isVerified ? verifiedBadge() : ""}
+            </div>
+            <div class="profileMeta">
+              <span class="dotStatus ${statusClass}" aria-hidden="true"></span>
+              <span>${escapeHtml(p.subtitle || "—")}</span>
+              <span style="opacity:.75;">•</span>
+              <span>${statusLabel}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profileRight">
+          <div class="openPill">فتح</div>
+          <div class="chev" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      `;
+
+      btn.addEventListener("click", () => {
+        const url = (p.url || "").trim();
+        if(!url) return;
+
+        if(OPEN_IN_NEW_TAB){
+          window.open(url, "_blank", "noopener,noreferrer");
+        } else {
+          window.location.href = url;
+        }
+      });
+
+      return btn;
+    }
+
+    function render(items){
+      list.innerHTML = "";
+      items.forEach((p, idx) => list.appendChild(makeProfileButton(p, idx)));
+      visiblePill.textContent = `المعروض: ${items.length}`;
+    }
+
+    countPill.textContent = `الإجمالي: ${PROFILES.length}`;
+    render(PROFILES);
+
+    q.addEventListener("input", () => {
+      const term = (q.value || "").trim().toLowerCase();
+      if(!term) return render(PROFILES);
+
+      const filtered = PROFILES.filter(p => {
+        const hay = ((p.name || "") + " " + (p.subtitle || "")).toLowerCase();
+        return hay.includes(term);
+      });
+
+      render(filtered);
+    });
   </script>
 </body>
 </html>
