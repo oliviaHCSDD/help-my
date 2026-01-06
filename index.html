@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تطبيقي</title>
+  <meta name="theme-color" content="#0b1220" />
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f1b33; --text:#e9eefc; --muted:#a8b3d6;
+      --line:rgba(233,238,252,.12); --accent:#79a7ff; --btn:#18335f; --btn2:#122a52;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 80% 0%, rgba(121,167,255,.25), transparent 60%),
+        radial-gradient(900px 500px at 10% 20%, rgba(121,167,255,.18), transparent 55%),
+        var(--bg);
+      min-height:100vh;
+    }
+
+    .shell{max-width:1200px; margin:0 auto; padding:14px;}
+    .card{
+      border:1px solid var(--line); border-radius:18px; overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+      min-height: calc(100vh - 28px);
+    }
+
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 16px; border-bottom:1px solid var(--line);
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(121,167,255,.18)}
+    .title{font-weight:800}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .status{
+      font-size:12px; color:var(--muted);
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background: rgba(255,255,255,.03);
+      white-space:nowrap;
+    }
+
+    main{display:grid; grid-template-columns:260px 1fr; min-height: calc(100vh - 72px - 28px);}
+    nav{
+      border-left:1px solid var(--line);
+      padding:10px;
+    }
+    .navTitle{font-size:12px;color:var(--muted);padding:8px 10px 2px}
+    .btn{
+      width:100%; border:1px solid var(--line);
+      background: rgba(255,255,255,.03); color:var(--text);
+      border-radius:14px; padding:10px 10px;
+      display:flex; align-items:center; justify-content:space-between;
+      cursor:pointer; margin-top:10px;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+      text-align:right;
+    }
+    .btn:hover{background: rgba(255,255,255,.06)}
+    .btn:active{transform:scale(.99)}
+    .btn.active{border-color: rgba(121,167,255,.55); background: rgba(121,167,255,.12)}
+    .tag{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:999px;background: rgba(255,255,255,.02)}
+
+    .content{display:flex; flex-direction:column}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px; border-bottom:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .crumb{font-size:13px;color:var(--muted)}
+    .reload{
+      border:1px solid var(--line); background: var(--btn); color: var(--text);
+      border-radius:12px; padding:8px 12px; cursor:pointer;
+    }
+    .reload:hover{background: var(--btn2)}
+
+    .wrap{position:relative; padding:12px; height:100%;}
+    iframe{
+      width:100%; height: calc(100vh - 72px - 28px - 54px - 24px);
+      border:1px solid var(--line); border-radius:16px; background:#fff;
+    }
+    .loader{
+      position:absolute; inset:12px;
+      border-radius:16px; background: rgba(15,27,51,.78);
+      border:1px solid var(--line);
+      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+      opacity:0; pointer-events:none; transition:opacity .15s ease;
+    }
+    .loader.show{opacity:1; pointer-events:auto;}
+    .spin{
+      width:34px;height:34px;border-radius:50%;
+      border:3px solid rgba(233,238,252,.18);
+      border-top-color: rgba(233,238,252,.8);
+      animation: s 1s linear infinite;
+    }
+    @keyframes s{to{transform:rotate(360deg)}}
+    .lt{font-size:13px;color:var(--muted)}
+
+    @media (max-width: 860px){
+      main{grid-template-columns:1fr;}
+      nav{display:none;}
+      iframe{height: calc(100vh - 72px - 28px - 54px - 24px);}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="card">
+      <header>
+        <div class="brand">
+          <span class="dot"></span>
+          <div>
+            <div class="title">تطبيقي</div>
+            <div class="sub">تنقل داخل واجهة واحدة</div>
+          </div>
+        </div>
+        <div class="status" id="status">جاهز</div>
+      </header>
+
+      <main>
+        <nav id="nav">
+          <div class="navTitle">التنقل</div>
+        </nav>
+
+        <section class="content">
+          <div class="topbar">
+            <div class="crumb" id="crumb">—</div>
+            <button class="reload" id="reload" type="button">تحديث</button>
+          </div>
+
+          <div class="wrap">
+            <div class="loader" id="loader">
+              <div class="spin"></div>
+              <div class="lt">جار التحميل…</div>
+            </div>
+
+            <iframe id="frame" src="about:blank" loading="lazy" referrerpolicy="no-referrer"></iframe>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // عدّلي الروابط هنا
+    const PAGES = [
+      { id: "home",  label: "الرئيسية", tag: "Home", url: "https://YOUR-BLOG-1.blogspot.com/" },
+      { id: "b2",    label: "مدونة 2",  tag: "Blog", url: "https://YOUR-BLOG-2.blogspot.com/" },
+      { id: "b3",    label: "مدونة 3",  tag: "Blog", url: "https://YOUR-BLOG-3.blogspot.com/" },
+      { id: "pageA", label: "صفحة A",   tag: "Page", url: "https://YOUR-BLOG-1.blogspot.com/p/your-page.html" }
+    ];
+
+    const nav = document.getElementById("nav");
+    const frame = document.getElementById("frame");
+    const loader = document.getElementById("loader");
+    const crumb = document.getElementById("crumb");
+    const status = document.getElementById("status");
+    const reload = document.getElementById("reload");
+
+    function setLoading(on, text){
+      loader.classList.toggle("show", !!on);
+      status.textContent = on ? (text || "جار التحميل…") : "جاهز";
+    }
+    function setActive(id){
+      document.querySelectorAll(".btn").forEach(b => b.classList.toggle("active", b.dataset.id === id));
+    }
+
+    function navigate(id){
+      const page = PAGES.find(p => p.id === id) || PAGES[0];
+      if(!page) return;
+
+      location.hash = "#" + page.id;            // URL داخل التطبيق
+      setActive(page.id);
+      crumb.textContent = page.label;
+      setLoading(true, "جار التحميل…");
+      frame.src = page.url;
+    }
+
+    PAGES.forEach(p => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn";
+      b.dataset.id = p.id;
+      b.innerHTML = `<span>${p.label}</span><span class="tag">${p.tag || ""}</span>`;
+      b.addEventListener("click", () => navigate(p.id));
+      nav.appendChild(b);
+    });
+
+    frame.addEventListener("load", () => setLoading(false));
+
+    reload.addEventListener("click", () => {
+      if(frame.src && frame.src !== "about:blank"){
+        setLoading(true, "تحديث…");
+        frame.src = frame.src;
+      }
+    });
+
+    // فتح الصفحة حسب الـ hash
+    window.addEventListener("hashchange", () => {
+      const id = (location.hash || "").replace("#","");
+      if(id) navigate(id);
+    });
+
+    // بداية
+    const start = (location.hash || "").replace("#","") || PAGES[0].id;
+    navigate(start);
+  </script>
+</body>
+</html>
