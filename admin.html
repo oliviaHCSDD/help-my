@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لوحة الأدمن</title>
+  <meta name="theme-color" content="#0b1220" />
+  <style>
+    :root{--bg:#0b1220;--text:#e9eefc;--muted:#a8b3d6;--line:rgba(233,238,252,.12);--shadow:0 18px 50px rgba(0,0,0,.35);--btn:#18335f;--btn2:#122a52}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);
+      background:radial-gradient(1200px 600px at 80% 0%, rgba(121,167,255,.26), transparent 60%),
+               radial-gradient(900px 500px at 10% 20%, rgba(156,245,255,.14), transparent 55%),var(--bg);min-height:100vh}
+    .wrap{max-width:1050px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+    .card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));box-shadow:var(--shadow);overflow:hidden}
+    header{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .title{font-weight:800} .sub{color:var(--muted);font-size:12px;margin-top:2px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pill{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;padding:8px 10px;border-radius:999px}
+    .btn{border:1px solid var(--line);background:var(--btn);color:var(--text);border-radius:12px;padding:10px 12px;cursor:pointer;font-weight:700}
+    .btn:hover{background:var(--btn2)} .btn.ghost{background:rgba(255,255,255,.03);color:var(--text)}
+    main{padding:16px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    label{display:block;color:var(--muted);font-size:12px;margin:10px 0 6px}
+    input,select{
+      width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+      background:rgba(255,255,255,.03);color:var(--text);outline:none
+    }
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{border-bottom:1px solid rgba(233,238,252,.08);padding:10px 8px;text-align:right;font-size:13px;vertical-align:top}
+    .table th{color:var(--muted);font-weight:700}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .small{padding:8px 10px;border-radius:10px;font-size:12px}
+    .danger{background:rgba(255,80,120,.12);border-color:rgba(255,80,120,.35)}
+    .danger:hover{background:rgba(255,80,120,.18)}
+    .muted{color:var(--muted);font-size:12px;line-height:1.6}
+    .hide{display:none}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:900px){.split{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="card" id="loginCard">
+      <header>
+        <div>
+          <div class="title">لوحة الأدمن</div>
+          <div class="sub">تسجيل دخول لإدارة البروفايلات والإعدادات</div>
+        </div>
+        <div class="pill" id="loginState">غير مسجل</div>
+      </header>
+      <main class="grid">
+        <div>
+          <label>البريد الإلكتروني</label>
+          <input id="email" type="email" placeholder="admin@email.com" />
+          <label>كلمة المرور</label>
+          <input id="password" type="password" placeholder="••••••••" />
+          <div class="row" style="margin-top:12px">
+            <button class="btn" id="loginBtn" type="button">تسجيل الدخول</button>
+            <a class="btn ghost" href="index.html">العودة للتطبيق</a>
+          </div>
+          <div class="muted" style="margin-top:10px" id="loginMsg"></div>
+        </div>
+        <div class="muted">
+          هذه الصفحة تُدار من داخل التطبيق. لا تفتحيها إلا لك. الدخول عبر Firebase Auth.
+        </div>
+      </main>
+    </div>
+
+    <div class="card hide" id="adminCard">
+      <header>
+        <div>
+          <div class="title">إدارة المحتوى</div>
+          <div class="sub">إضافة/تعديل/حذف بروفايلات + إعدادات الواجهة</div>
+        </div>
+        <div class="row">
+          <div class="pill" id="userPill">—</div>
+          <button class="btn ghost" id="logoutBtn" type="button">تسجيل خروج</button>
+          <a class="btn ghost" href="index.html">عرض التطبيق</a>
+        </div>
+      </header>
+
+      <main class="split">
+        <div>
+          <div class="title" style="margin-bottom:6px">إعدادات الواجهة</div>
+          <label>عنوان التطبيق</label>
+          <input id="sTitle" type="text" />
+          <label>وصف/سطر ثانٍ</label>
+          <input id="sSubtitle" type="text" />
+          <label>فتح روابط بلوجر</label>
+          <select id="sOpenMode">
+            <option value="same">نفس التبويب</option>
+            <option value="new">تبويب جديد</option>
+          </select>
+          <div class="row" style="margin-top:12px">
+            <button class="btn" id="saveSettingsBtn" type="button">حفظ الإعدادات</button>
+          </div>
+          <div class="muted" id="settingsMsg" style="margin-top:10px"></div>
+        </div>
+
+        <div>
+          <div class="title" style="margin-bottom:6px">إضافة/تعديل بروفايل</div>
+          <input id="editId" type="hidden" />
+
+          <label>الاسم</label>
+          <input id="pName" type="text" placeholder="اسم البروفايل" />
+
+          <label>وصف صغير</label>
+          <input id="pSubtitle" type="text" placeholder="مثال: مدونة شخصية" />
+
+          <label>رابط صورة (اختياري)</label>
+          <input id="pAvatar" type="url" placeholder="https://...jpg" />
+
+          <label>رابط صفحة بلوجر</label>
+          <input id="pUrl" type="url" placeholder="https://your-blog.blogspot.com/..." />
+
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px">
+            <div>
+              <label>الحالة</label>
+              <select id="pStatus">
+                <option value="offline">غير متصل</option>
+                <option value="online">متصل</option>
+              </select>
+            </div>
+            <div>
+              <label>الترتيب (رقم)</label>
+              <input id="pOrder" type="number" placeholder="1" />
+            </div>
+          </div>
+
+          <label>إظهار البروفايل</label>
+          <select id="pActive">
+            <option value="true">مفعل</option>
+            <option value="false">مخفي</option>
+          </select>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn" id="saveProfileBtn" type="button">حفظ البروفايل</button>
+            <button class="btn ghost" id="clearBtn" type="button">مسح الحقول</button>
+          </div>
+
+          <div class="muted" id="profileMsg" style="margin-top:10px"></div>
+        </div>
+      </main>
+
+      <main style="padding-top:0">
+        <div class="title" style="margin: 0 0 10px">قائمة البروفايلات</div>
+        <div style="overflow:auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>الرابط</th>
+                <th>ترتيب</th>
+                <th>حالة</th>
+                <th>مفعل</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div class="muted" style="margin-top:10px" id="listMsg"></div>
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      watchAuth, login, logout,
+      liveProfiles, createProfile, updateProfile, deleteProfile,
+      getSettings, saveSettings
+    } from "./app.js";
+
+    const loginCard = document.getElementById("loginCard");
+    const adminCard = document.getElementById("adminCard");
+    const loginState = document.getElementById("loginState");
+    const userPill = document.getElementById("userPill");
+
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loginMsg = document.getElementById("loginMsg");
+
+    const sTitle = document.getElementById("sTitle");
+    const sSubtitle = document.getElementById("sSubtitle");
+    const sOpenMode = document.getElementById("sOpenMode");
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+    const settingsMsg = document.getElementById("settingsMsg");
+
+    const editId = document.getElementById("editId");
+    const pName = document.getElementById("pName");
+    const pSubtitle = document.getElementById("pSubtitle");
+    const pAvatar = document.getElementById("pAvatar");
+    const pUrl = document.getElementById("pUrl");
+    const pStatus = document.getElementById("pStatus");
+    const pOrder = document.getElementById("pOrder");
+    const pActive = document.getElementById("pActive");
+    const saveProfileBtn = document.getElementById("saveProfileBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const profileMsg = document.getElementById("profileMsg");
+
+    const tbody = document.getElementById("tbody");
+    const listMsg = document.getElementById("listMsg");
+
+    let unsubscribe = null;
+    let currentProfiles = [];
+
+    function setMsg(el, text){ el.textContent = text || ""; }
+    function esc(s){ return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+
+    function clearForm(){
+      editId.value = "";
+      pName.value = "";
+      pSubtitle.value = "";
+      pAvatar.value = "";
+      pUrl.value = "";
+      pStatus.value = "offline";
+      pOrder.value = "";
+      pActive.value = "true";
+      setMsg(profileMsg, "");
+    }
+
+    function fillForm(p){
+      editId.value = p.id;
+      pName.value = p.name || "";
+      pSubtitle.value = p.subtitle || "";
+      pAvatar.value = p.avatar || "";
+      pUrl.value = p.url || "";
+      pStatus.value = p.status === "online" ? "online" : "offline";
+      pOrder.value = (p.order ?? "");
+      pActive.value = (p.active === false) ? "false" : "true";
+      setMsg(profileMsg, `تعديل: ${p.name || p.id}`);
+    }
+
+    function renderTable(items){
+      tbody.innerHTML = "";
+      items.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${esc(p.name || "")}</td>
+          <td style="max-width:360px;word-break:break-word;color:rgba(233,238,252,.85)">${esc(p.url || "")}</td>
+          <td>${esc(p.order ?? "")}</td>
+          <td>${esc(p.status || "offline")}</td>
+          <td>${(p.active === false) ? "مخفي" : "مفعل"}</td>
+          <td>
+            <div class="actions">
+              <button class="btn ghost small" data-act="edit" data-id="${p.id}">تعديل</button>
+              <button class="btn ghost small danger" data-act="del" data-id="${p.id}">حذف</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll("button[data-act]").forEach(b => {
+        b.addEventListener("click", async () => {
+          const act = b.getAttribute("data-act");
+          const id = b.getAttribute("data-id");
+          const p = currentProfiles.find(x => x.id === id);
+          if(!p) return;
+
+          if(act === "edit"){
+            fillForm(p);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+          if(act === "del"){
+            if(!confirm(`حذف "${p.name}"؟`)) return;
+            try{
+              await deleteProfile(id);
+              setMsg(listMsg, "تم الحذف.");
+              if(editId.value === id) clearForm();
+            }catch(e){
+              setMsg(listMsg,
