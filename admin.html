@@ -6,114 +6,169 @@
   <title>لوحة الأدمن</title>
   <meta name="theme-color" content="#0b1220" />
   <style>
-    :root{--bg:#0b1220;--text:#e9eefc;--muted:#a8b3d6;--line:rgba(233,238,252,.12);--shadow:0 18px 50px rgba(0,0,0,.35);--btn:#18335f;--btn2:#122a52}
+    :root{
+      --bg:#0b1220; --text:#e9eefc; --muted:#a8b3d6;
+      --line:rgba(233,238,252,.12); --shadow:0 18px 50px rgba(0,0,0,.35);
+      --card:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+      --btn:#18335f; --btn2:#122a52;
+      --danger:rgba(255,80,120,.14); --danger2:rgba(255,80,120,.20);
+      --ok:rgba(80,220,140,.12); --ok2:rgba(80,220,140,.18);
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);
-      background:radial-gradient(1200px 600px at 80% 0%, rgba(121,167,255,.26), transparent 60%),
-               radial-gradient(900px 500px at 10% 20%, rgba(156,245,255,.14), transparent 55%),var(--bg);min-height:100vh}
-    .wrap{max-width:1050px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px}
-    .card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));box-shadow:var(--shadow);overflow:hidden}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 80% 0%, rgba(121,167,255,.26), transparent 60%),
+        radial-gradient(900px 500px at 10% 20%, rgba(156,245,255,.14), transparent 55%),
+        var(--bg);
+      min-height:100vh;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+    .card{border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:var(--shadow);overflow:hidden}
     header{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .title{font-weight:800} .sub{color:var(--muted);font-size:12px;margin-top:2px}
+    .hgroup{min-width:0}
+    .title{font-weight:900;letter-spacing:.2px}
+    .sub{color:var(--muted);font-size:12px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .pill{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;padding:8px 10px;border-radius:999px}
-    .btn{border:1px solid var(--line);background:var(--btn);color:var(--text);border-radius:12px;padding:10px 12px;cursor:pointer;font-weight:700}
-    .btn:hover{background:var(--btn2)} .btn.ghost{background:rgba(255,255,255,.03);color:var(--text)}
+    .btn{
+      border:1px solid var(--line);background:var(--btn);color:var(--text);
+      border-radius:12px;padding:10px 12px;cursor:pointer;font-weight:800
+    }
+    .btn:hover{background:var(--btn2)}
+    .btn.ghost{background:rgba(255,255,255,.03)}
+    .btn.danger{background:var(--danger);border-color:rgba(255,80,120,.35)}
+    .btn.danger:hover{background:var(--danger2)}
+    .btn.ok{background:var(--ok);border-color:rgba(80,220,140,.35)}
+    .btn.ok:hover{background:var(--ok2)}
     main{padding:16px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
     label{display:block;color:var(--muted);font-size:12px;margin:10px 0 6px}
-    input,select{
+    input,select,textarea{
       width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);
       background:rgba(255,255,255,.03);color:var(--text);outline:none
     }
-    .table{width:100%;border-collapse:collapse}
-    .table th,.table td{border-bottom:1px solid rgba(233,238,252,.08);padding:10px 8px;text-align:right;font-size:13px;vertical-align:top}
-    .table th{color:var(--muted);font-weight:700}
+    textarea{min-height:84px;resize:vertical}
+    .msg{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.7}
+    .msg.error{color:#ffb3c7}
+    .msg.ok{color:#b6ffd3}
+    .hide{display:none}
+    .tableWrap{overflow:auto;border:1px solid rgba(233,238,252,.08);border-radius:14px}
+    table{width:100%;border-collapse:collapse;min-width:840px}
+    th,td{border-bottom:1px solid rgba(233,238,252,.08);padding:10px 8px;text-align:right;font-size:13px;vertical-align:top}
+    th{color:var(--muted);font-weight:800;background:rgba(255,255,255,.02)}
     .actions{display:flex;gap:8px;flex-wrap:wrap}
     .small{padding:8px 10px;border-radius:10px;font-size:12px}
-    .danger{background:rgba(255,80,120,.12);border-color:rgba(255,80,120,.35)}
-    .danger:hover{background:rgba(255,80,120,.18)}
-    .muted{color:var(--muted);font-size:12px;line-height:1.6}
-    .hide{display:none}
+    a{color:inherit;text-decoration:none}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;color:rgba(233,238,252,.75)}
     .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:900px){.split{grid-template-columns:1fr}}
+    @media (max-width:980px){.split{grid-template-columns:1fr}}
+    .hr{height:1px;background:rgba(233,238,252,.10);margin:12px 0}
   </style>
 </head>
+
 <body>
   <div class="wrap">
 
+    <!-- LOGIN CARD -->
     <div class="card" id="loginCard">
       <header>
-        <div>
+        <div class="hgroup">
           <div class="title">لوحة الأدمن</div>
           <div class="sub">تسجيل دخول لإدارة البروفايلات والإعدادات</div>
         </div>
-        <div class="pill" id="loginState">غير مسجل</div>
+        <div class="row">
+          <div class="pill" id="authPill">غير مسجل</div>
+          <a class="btn ghost" href="./index.html">العودة للتطبيق</a>
+        </div>
       </header>
       <main class="grid">
         <div>
           <label>البريد الإلكتروني</label>
-          <input id="email" type="email" placeholder="admin@email.com" />
+          <input id="email" type="email" placeholder="admin@email.com" autocomplete="username" />
           <label>كلمة المرور</label>
-          <input id="password" type="password" placeholder="••••••••" />
+          <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
           <div class="row" style="margin-top:12px">
             <button class="btn" id="loginBtn" type="button">تسجيل الدخول</button>
-            <a class="btn ghost" href="index.html">العودة للتطبيق</a>
+            <button class="btn ghost" id="showDebugBtn" type="button">عرض التشخيص</button>
           </div>
-          <div class="muted" style="margin-top:10px" id="loginMsg"></div>
+          <div class="msg" id="loginMsg"></div>
+          <div class="msg" id="debugBox" style="display:none">
+            <div class="kbd" id="debugText">—</div>
+          </div>
         </div>
-        <div class="muted">
-          هذه الصفحة تُدار من داخل التطبيق. لا تفتحيها إلا لك. الدخول عبر Firebase Auth.
+
+        <div class="msg">
+          <b>ملاحظات مهمة:</b><br>
+          1) يجب أن يكون الدومين <span class="kbd">oliviahcsdd.github.io</span> مضافًا في Firebase → Authentication → Authorized domains.<br>
+          2) يجب أن يكون Email/Password مفعّلًا، وأن يوجد المستخدم في Authentication → Users.<br>
+          3) إذا فشل الدخول، ستظهر رسالة الخطأ هنا لتحديد السبب.
         </div>
       </main>
     </div>
 
+    <!-- ADMIN CARD -->
     <div class="card hide" id="adminCard">
       <header>
-        <div>
+        <div class="hgroup">
           <div class="title">إدارة المحتوى</div>
           <div class="sub">إضافة/تعديل/حذف بروفايلات + إعدادات الواجهة</div>
         </div>
         <div class="row">
           <div class="pill" id="userPill">—</div>
           <button class="btn ghost" id="logoutBtn" type="button">تسجيل خروج</button>
-          <a class="btn ghost" href="index.html">عرض التطبيق</a>
+          <a class="btn ghost" href="./index.html">عرض التطبيق</a>
         </div>
       </header>
 
       <main class="split">
+        <!-- SETTINGS -->
         <div>
-          <div class="title" style="margin-bottom:6px">إعدادات الواجهة</div>
-          <label>عنوان التطبيق</label>
-          <input id="sTitle" type="text" />
-          <label>وصف/سطر ثانٍ</label>
-          <input id="sSubtitle" type="text" />
+          <div class="title" style="margin-bottom:6px">إعدادات التطبيق</div>
+
+          <label>عنوان التطبيق (يظهر في الصفحة الرئيسية)</label>
+          <input id="sTitle" type="text" placeholder="قائمة البروفايلات" />
+
+          <label>الوصف / سطر ثانٍ</label>
+          <input id="sSubtitle" type="text" placeholder="اختاري بروفايل للانتقال إلى بلوجر" />
+
           <label>فتح روابط بلوجر</label>
           <select id="sOpenMode">
             <option value="same">نفس التبويب</option>
             <option value="new">تبويب جديد</option>
           </select>
+
           <div class="row" style="margin-top:12px">
-            <button class="btn" id="saveSettingsBtn" type="button">حفظ الإعدادات</button>
+            <button class="btn ok" id="saveSettingsBtn" type="button">حفظ الإعدادات</button>
           </div>
-          <div class="muted" id="settingsMsg" style="margin-top:10px"></div>
+
+          <div class="msg" id="settingsMsg"></div>
+
+          <div class="hr"></div>
+
+          <div class="msg">
+            <b>تنظيم البيانات:</b><br>
+            البروفايلات تُخزن في Collection اسمها <span class="kbd">profiles</span>.<br>
+            إعدادات التطبيق تُخزن في Document: <span class="kbd">app/settings</span>.
+          </div>
         </div>
 
+        <!-- PROFILE FORM -->
         <div>
-          <div class="title" style="margin-bottom:6px">إضافة/تعديل بروفايل</div>
+          <div class="title" style="margin-bottom:6px">إضافة / تعديل بروفايل</div>
           <input id="editId" type="hidden" />
 
-          <label>الاسم</label>
-          <input id="pName" type="text" placeholder="اسم البروفايل" />
+          <label>اسم البروفايل</label>
+          <input id="pName" type="text" placeholder="مثال: أحمد علي" />
 
           <label>وصف صغير</label>
           <input id="pSubtitle" type="text" placeholder="مثال: مدونة شخصية" />
 
-          <label>رابط صورة (اختياري)</label>
-          <input id="pAvatar" type="url" placeholder="https://...jpg" />
+          <label>رابط صورة بروفايل (اختياري)</label>
+          <input id="pAvatar" type="url" placeholder="https://.../avatar.jpg" />
 
-          <label>رابط صفحة بلوجر</label>
+          <label>رابط صفحة بلوجر (مطلوب)</label>
           <input id="pUrl" type="url" placeholder="https://your-blog.blogspot.com/..." />
 
           <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px">
@@ -137,18 +192,28 @@
           </select>
 
           <div class="row" style="margin-top:12px">
-            <button class="btn" id="saveProfileBtn" type="button">حفظ البروفايل</button>
+            <button class="btn ok" id="saveProfileBtn" type="button">حفظ البروفايل</button>
             <button class="btn ghost" id="clearBtn" type="button">مسح الحقول</button>
           </div>
 
-          <div class="muted" id="profileMsg" style="margin-top:10px"></div>
+          <div class="msg" id="profileMsg"></div>
         </div>
       </main>
 
       <main style="padding-top:0">
-        <div class="title" style="margin: 0 0 10px">قائمة البروفايلات</div>
-        <div style="overflow:auto">
-          <table class="table">
+        <div class="row" style="justify-content:space-between;align-items:flex-end">
+          <div>
+            <div class="title" style="margin:0 0 6px">قائمة البروفايلات</div>
+            <div class="sub" id="listHint">—</div>
+          </div>
+          <div class="row">
+            <input id="filterQ" type="text" placeholder="بحث سريع…" style="width:min(320px,92vw)" />
+            <button class="btn ghost small" id="refreshBtn" type="button">تحديث</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px" class="tableWrap">
+          <table>
             <thead>
               <tr>
                 <th>الاسم</th>
@@ -162,21 +227,53 @@
             <tbody id="tbody"></tbody>
           </table>
         </div>
-        <div class="muted" style="margin-top:10px" id="listMsg"></div>
+
+        <div class="msg" id="listMsg"></div>
       </main>
     </div>
   </div>
 
   <script type="module">
+    /* =========================
+       Firebase (CDN / GitHub Pages)
+       ========================= */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import {
-      watchAuth, login, logout,
-      liveProfiles, createProfile, updateProfile, deleteProfile,
-      getSettings, saveSettings
-    } from "./app.js";
+      getAuth, onAuthStateChanged,
+      signInWithEmailAndPassword, signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import {
+      getFirestore,
+      collection, doc,
+      getDoc, setDoc,
+      addDoc, updateDoc, deleteDoc,
+      onSnapshot, query, orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+    // ✅ إعدادات مشروعك
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5c4maRwuXA8ZnwTa6JHQ6PcT5tE5ODY",
+      authDomain: "my-html-app-e06ff.firebaseapp.com",
+      projectId: "my-html-app-e06ff",
+      storageBucket: "my-html-app-e06ff.firebasestorage.app",
+      messagingSenderId: "970956317798",
+      appId: "1:970956317798:web:60f582049daec9aeb639a7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const profilesCol = collection(db, "profiles");
+    const settingsRef = doc(db, "app", "settings");
+
+    /* =========================
+       UI Elements
+       ========================= */
     const loginCard = document.getElementById("loginCard");
     const adminCard = document.getElementById("adminCard");
-    const loginState = document.getElementById("loginState");
+    const authPill = document.getElementById("authPill");
     const userPill = document.getElementById("userPill");
 
     const email = document.getElementById("email");
@@ -184,6 +281,10 @@
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const loginMsg = document.getElementById("loginMsg");
+
+    const showDebugBtn = document.getElementById("showDebugBtn");
+    const debugBox = document.getElementById("debugBox");
+    const debugText = document.getElementById("debugText");
 
     const sTitle = document.getElementById("sTitle");
     const sSubtitle = document.getElementById("sSubtitle");
@@ -203,14 +304,30 @@
     const clearBtn = document.getElementById("clearBtn");
     const profileMsg = document.getElementById("profileMsg");
 
+    const filterQ = document.getElementById("filterQ");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const listHint = document.getElementById("listHint");
     const tbody = document.getElementById("tbody");
     const listMsg = document.getElementById("listMsg");
 
-    let unsubscribe = null;
-    let currentProfiles = [];
-
-    function setMsg(el, text){ el.textContent = text || ""; }
-    function esc(s){ return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+    /* =========================
+       Helpers
+       ========================= */
+    function setMsg(el, text, kind){
+      el.classList.remove("error","ok");
+      if(kind) el.classList.add(kind);
+      el.textContent = text || "";
+    }
+    function esc(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
+    function normalizeErr(e){
+      const code = e?.code || "";
+      const msg = e?.message || String(e || "");
+      return { code, msg };
+    }
 
     function clearForm(){
       editId.value = "";
@@ -234,44 +351,266 @@
       pOrder.value = (p.order ?? "");
       pActive.value = (p.active === false) ? "false" : "true";
       setMsg(profileMsg, `تعديل: ${p.name || p.id}`);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function renderTable(items){
+    /* =========================
+       Debug Toggle
+       ========================= */
+    showDebugBtn.addEventListener("click", () => {
+      debugBox.style.display = (debugBox.style.display === "none") ? "block" : "none";
+    });
+
+    /* =========================
+       Auth
+       ========================= */
+    loginBtn.addEventListener("click", async () => {
+      setMsg(loginMsg, "");
+      debugText.textContent = "—";
+      const em = email.value.trim();
+      const pw = password.value;
+
+      if(!em || !pw){
+        setMsg(loginMsg, "أدخلي البريد وكلمة المرور.", "error");
+        return;
+      }
+
+      try{
+        await signInWithEmailAndPassword(auth, em, pw);
+        // onAuthStateChanged سيتولى إظهار لوحة الأدمن
+      }catch(e){
+        const { code, msg } = normalizeErr(e);
+        setMsg(loginMsg, "فشل تسجيل الدخول. راجعي البيانات أو الإعدادات.", "error");
+        debugText.textContent =
+          `code: ${code}\nmessage: ${msg}\n` +
+          `tip: إذا كان code = auth/unauthorized-domain أضيفي oliviahcsdd.github.io في Authorized domains.`;
+        debugBox.style.display = "block";
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    let unsubProfiles = null;
+    let profilesCache = [];
+
+    onAuthStateChanged(auth, async (user) => {
+      if(user){
+        authPill.textContent = "مسجل";
+        userPill.textContent = user.email || "Admin";
+
+        loginCard.classList.add("hide");
+        adminCard.classList.remove("hide");
+
+        await loadSettings();
+        attachProfilesListener();
+      } else {
+        authPill.textContent = "غير مسجل";
+        loginCard.classList.remove("hide");
+        adminCard.classList.add("hide");
+
+        if(unsubProfiles){ unsubProfiles(); unsubProfiles = null; }
+        profilesCache = [];
+        tbody.innerHTML = "";
+        clearForm();
+      }
+    });
+
+    /* =========================
+       Settings
+       ========================= */
+    async function loadSettings(){
+      try{
+        const snap = await getDoc(settingsRef);
+        const s = snap.exists() ? snap.data() : {
+          appTitle: "قائمة البروفايلات",
+          appSubtitle: "اختاري بروفايل للانتقال إلى بلوجر",
+          openInNewTab: false
+        };
+        sTitle.value = s.appTitle || "";
+        sSubtitle.value = s.appSubtitle || "";
+        sOpenMode.value = s.openInNewTab ? "new" : "same";
+        setMsg(settingsMsg, "");
+      }catch(e){
+        const { code, msg } = normalizeErr(e);
+        setMsg(settingsMsg, `تعذر تحميل الإعدادات. (${code})`, "error");
+        debugText.textContent = `settings load error: ${code}\n${msg}`;
+        debugBox.style.display = "block";
+      }
+    }
+
+    saveSettingsBtn.addEventListener("click", async () => {
+      setMsg(settingsMsg, "");
+      try{
+        await setDoc(settingsRef, {
+          appTitle: sTitle.value.trim() || "قائمة البروفايلات",
+          appSubtitle: sSubtitle.value.trim() || "",
+          openInNewTab: (sOpenMode.value === "new"),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        setMsg(settingsMsg, "تم حفظ الإعدادات.", "ok");
+      }catch(e){
+        const { code, msg } = normalizeErr(e);
+        setMsg(settingsMsg, `فشل حفظ الإعدادات. (${code})`, "error");
+        debugText.textContent = `settings save error: ${code}\n${msg}`;
+        debugBox.style.display = "block";
+      }
+    });
+
+    /* =========================
+       Profiles Live List
+       ========================= */
+    function attachProfilesListener(){
+      if(unsubProfiles) unsubProfiles();
+
+      const q = query(profilesCol, orderBy("order", "asc"));
+      unsubProfiles = onSnapshot(q, (snap) => {
+        profilesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderTable();
+      }, (e) => {
+        const { code, msg } = normalizeErr(e);
+        setMsg(listMsg, `تعذر قراءة البروفايلات. (${code})`, "error");
+        debugText.textContent = `profiles read error: ${code}\n${msg}`;
+        debugBox.style.display = "block";
+      });
+    }
+
+    function renderTable(){
+      const term = (filterQ.value || "").trim().toLowerCase();
+      const items = term
+        ? profilesCache.filter(p => ((p.name||"")+" "+(p.subtitle||"")+" "+(p.url||"")).toLowerCase().includes(term))
+        : profilesCache;
+
+      listHint.textContent = `الإجمالي: ${profilesCache.length} — المعروض: ${items.length}`;
+
       tbody.innerHTML = "";
       items.forEach(p => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${esc(p.name || "")}</td>
-          <td style="max-width:360px;word-break:break-word;color:rgba(233,238,252,.85)">${esc(p.url || "")}</td>
+          <td>${esc(p.name || "")}<div class="sub" style="margin-top:4px">${esc(p.subtitle||"")}</div></td>
+          <td style="max-width:380px;word-break:break-word;color:rgba(233,238,252,.85)">${esc(p.url || "")}</td>
           <td>${esc(p.order ?? "")}</td>
           <td>${esc(p.status || "offline")}</td>
           <td>${(p.active === false) ? "مخفي" : "مفعل"}</td>
           <td>
             <div class="actions">
               <button class="btn ghost small" data-act="edit" data-id="${p.id}">تعديل</button>
-              <button class="btn ghost small danger" data-act="del" data-id="${p.id}">حذف</button>
+              <button class="btn ghost small" data-act="toggle" data-id="${p.id}">
+                ${(p.active === false) ? "تفعيل" : "إخفاء"}
+              </button>
+              <button class="btn danger small" data-act="del" data-id="${p.id}">حذف</button>
             </div>
           </td>
         `;
         tbody.appendChild(tr);
       });
 
-      tbody.querySelectorAll("button[data-act]").forEach(b => {
-        b.addEventListener("click", async () => {
-          const act = b.getAttribute("data-act");
-          const id = b.getAttribute("data-id");
-          const p = currentProfiles.find(x => x.id === id);
+      tbody.querySelectorAll("button[data-act]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const act = btn.getAttribute("data-act");
+          const id = btn.getAttribute("data-id");
+          const p = profilesCache.find(x => x.id === id);
           if(!p) return;
 
           if(act === "edit"){
             fillForm(p);
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
           }
+
+          if(act === "toggle"){
+            try{
+              await updateDoc(doc(db, "profiles", id), {
+                active: !(p.active !== false), // قلب القيمة
+                updatedAt: serverTimestamp()
+              });
+              setMsg(listMsg, "تم التحديث.", "ok");
+            }catch(e){
+              const { code, msg } = normalizeErr(e);
+              setMsg(listMsg, `فشل التحديث. (${code})`, "error");
+              debugText.textContent = `toggle error: ${code}\n${msg}`;
+              debugBox.style.display = "block";
+            }
+            return;
+          }
+
           if(act === "del"){
             if(!confirm(`حذف "${p.name}"؟`)) return;
             try{
-              await deleteProfile(id);
-              setMsg(listMsg, "تم الحذف.");
+              await deleteDoc(doc(db, "profiles", id));
               if(editId.value === id) clearForm();
+              setMsg(listMsg, "تم الحذف.", "ok");
             }catch(e){
-              setMsg(listMsg,
+              const { code, msg } = normalizeErr(e);
+              setMsg(listMsg, `فشل الحذف. (${code})`, "error");
+              debugText.textContent = `delete error: ${code}\n${msg}`;
+              debugBox.style.display = "block";
+            }
+            return;
+          }
+        });
+      });
+    }
+
+    filterQ.addEventListener("input", renderTable);
+    refreshBtn.addEventListener("click", () => {
+      // onSnapshot live already; just re-render
+      renderTable();
+      setMsg(listMsg, "تم التحديث.", "ok");
+      setTimeout(()=>setMsg(listMsg,""), 1200);
+    });
+
+    /* =========================
+       Create/Update Profile
+       ========================= */
+    saveProfileBtn.addEventListener("click", async () => {
+      setMsg(profileMsg, "");
+
+      const payload = {
+        name: pName.value.trim(),
+        subtitle: pSubtitle.value.trim(),
+        avatar: pAvatar.value.trim(),
+        url: pUrl.value.trim(),
+        status: pStatus.value === "online" ? "online" : "offline",
+        order: (pOrder.value === "" ? 9999 : Number(pOrder.value)),
+        active: (pActive.value === "true"),
+        updatedAt: serverTimestamp()
+      };
+
+      if(!payload.name || !payload.url){
+        setMsg(profileMsg, "الاسم + رابط بلوجر مطلوبين.", "error");
+        return;
+      }
+
+      try{
+        if(editId.value){
+          await updateDoc(doc(db, "profiles", editId.value), payload);
+          setMsg(profileMsg, "تم التعديل.", "ok");
+        } else {
+          await addDoc(profilesCol, {
+            ...payload,
+            createdAt: serverTimestamp()
+          });
+          setMsg(profileMsg, "تمت الإضافة.", "ok");
+        }
+        clearForm();
+      }catch(e){
+        const { code, msg } = normalizeErr(e);
+        setMsg(profileMsg, `فشل الحفظ. (${code})`, "error");
+        debugText.textContent = `save profile error: ${code}\n${msg}`;
+        debugBox.style.display = "block";
+      }
+    });
+
+    clearBtn.addEventListener("click", clearForm);
+  </script>
+
+  <!-- (اختياري) تسجيل Service Worker إذا أضفتِ PWA لاحقًا -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(()=>{});
+    }
+  </script>
+</body>
+</html>
